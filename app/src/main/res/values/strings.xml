@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">DBTest</string>
+    <string name="name">Name</string>
+    <string name="insert">Insert</string>
+    <string name="id">Id</string>
+    <string name="enter_your_name">Enter Your Name</string>
+    <string name="enter_your_email">Enter Your Email</string>
+    <string name="enter_your_website">Enter Your Website</string>
+    <string name="submit_data_to_server">Submit Data To DB</string>
+    <string name="get_content_from_db">Get Data from DB</string>
+</resources>
