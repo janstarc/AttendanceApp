@@ -1,6 +1,6 @@
 package com.jan.dbtest;
 
-// Edit thorugh gitlab
+// Random change
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
