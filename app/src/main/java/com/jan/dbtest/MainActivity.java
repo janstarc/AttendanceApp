@@ -1,35 +1,16 @@
 package com.jan.dbtest;
 
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -40,6 +21,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
     String GetWebsite;
 
     Button buttonSubmit;
-
-    String DataParseUrl = "https://android-db-js5898.c9users.io/insert_data.php";
 
     // Select part
     private JSONArray result;
@@ -81,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         // Get data
         buttonGet.setOnClickListener(getDataClicked);
 
+
     }
 
     // Click listeners
@@ -89,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v){
             GetDataFromEditText();
-            SendDataToServer(GetName, GetEmail, GetWebsite);
+            //SendDataToServer(GetName, GetEmail, GetWebsite);
+            SendData();
         }
     };
 
@@ -109,53 +92,70 @@ public class MainActivity extends AppCompatActivity {
         GetWebsite = editTextWebsite.getText().toString();
     }
 
+    // Implementation using Volley library
+    private void SendData(){
 
-    // Sending things to the DB
-    public void SendDataToServer(final String name, final String email, final String website){
-        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+        // Creating Volley RequestQueue.
+        RequestQueue requestQueue;
 
+        // Creating Progress dialog.
+        final ProgressDialog progressDialog;
+
+        // Storing server url into String variable.
+        String HttpUrl = "https://android-db-js5898.c9users.io/insert_data.php";
+
+        // Creating Volley newRequestQueue .
+        requestQueue = Volley.newRequestQueue(MainActivity.this);
+        progressDialog = new ProgressDialog(MainActivity.this);
+
+        // Showing progress dialog at user registration time.
+        progressDialog.setMessage("Please Wait, We are Inserting Your Data on Server");
+        progressDialog.show();
+
+        // Creating string request with post method.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, HttpUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String ServerResponse) {
+
+                        // Hiding the progress dialog after all task complete.
+                        progressDialog.dismiss();
+
+                        // Showing response message coming from server.
+                        Toast.makeText(MainActivity.this, ServerResponse, Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                        // Hiding the progress dialog after all task complete.
+                        progressDialog.dismiss();
+
+                        // Showing error message if something goes wrong.
+                        Toast.makeText(MainActivity.this, volleyError.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
             @Override
-            protected String doInBackground(String... params) {
+            protected Map<String, String> getParams() {
 
-                String QuickName = name;
-                String QuickEmail = email;
-                String QuickWebsite = website;
+                // Creating Map String Params.
+                Map<String, String> params = new HashMap<>();
 
-                List<NameValuePair> nameValuePairs = new ArrayList<>();
+                // Adding All values to Params.
+                params.put("name", GetName);
+                params.put("email", GetEmail);
+                params.put("website", GetWebsite);
 
-                nameValuePairs.add(new BasicNameValuePair("name", QuickName));
-                nameValuePairs.add(new BasicNameValuePair("email", QuickEmail));
-                nameValuePairs.add(new BasicNameValuePair("website", QuickWebsite));
-
-                try {
-                    // TODO
-                    HttpClient httpClient = new DefaultHttpClient();
-                    HttpPost httpPost = new HttpPost(DataParseUrl);
-                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                    HttpResponse response = httpClient.execute(httpPost);
-                    HttpEntity entity = response.getEntity();
-
-                } catch (ClientProtocolException e) {
-                    Log.d("debug", "Client protocol exception");
-                    Toast.makeText(MainActivity.this, "Error submiting data (CPE) - please try later", Toast.LENGTH_LONG).show();
-
-                } catch (IOException e) {
-                    Toast.makeText(MainActivity.this, "Error submiting data (IOE) - please try later", Toast.LENGTH_LONG).show();
-                }
-                return "Data Submit Successfully";
+                return params;
             }
 
-            @Override
-            protected void onPostExecute(String result) {
-                super.onPostExecute(result);
+        };
 
-                Toast.makeText(MainActivity.this, "Data Submit Successfully", Toast.LENGTH_LONG).show();
-
-            }
-        }
-        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
-        sendPostReqAsyncTask.execute(name, email, website);
+        // Adding the StringRequest object into requestQueue.
+        requestQueue.add(stringRequest);
     }
+
 
     private void getData(){
         Log.d("debug", "HERE 2");
@@ -208,5 +208,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 }
