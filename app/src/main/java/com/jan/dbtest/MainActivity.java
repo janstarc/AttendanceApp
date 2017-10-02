@@ -1,5 +1,6 @@
 package com.jan.dbtest;
 
+// Edit thorugh gitlab
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
