@@ -16,6 +16,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 nameValuePairs.add(new BasicNameValuePair("website", QuickWebsite));
 
                 try {
+                    // TODO
                     HttpClient httpClient = new DefaultHttpClient();
                     HttpPost httpPost = new HttpPost(DataParseUrl);
                     httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
