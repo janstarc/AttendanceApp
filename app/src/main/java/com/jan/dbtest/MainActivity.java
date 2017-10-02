@@ -33,9 +33,9 @@ public class MainActivity extends AppCompatActivity {
     EditText editTextEmail;
     EditText editTextWebsite;
 
-    String GetName;
-    String GetEmail;
-    String GetWebsite;
+    String nameInsert;
+    String emailInsert;
+    String websitelInsert;
 
     Button buttonSubmit;
 
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private JSONArray result;
     private TextView textView1;
     private Button buttonGet;
+    boolean log = false;
 
 
     @Override
@@ -64,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         // Get data
         buttonGet.setOnClickListener(getDataClicked);
 
-
     }
 
     // Click listeners
@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v){
             GetDataFromEditText();
-            //SendDataToServer(GetName, GetEmail, GetWebsite);
             SendData();
         }
     };
@@ -89,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
     // Support function, just to set values of already declared Strings
     public void GetDataFromEditText(){
 
-        GetName = editTextName.getText().toString();
-        GetEmail = editTextEmail.getText().toString();
-        GetWebsite = editTextWebsite.getText().toString();
+        nameInsert = editTextName.getText().toString();
+        emailInsert = editTextEmail.getText().toString();
+        websitelInsert = editTextWebsite.getText().toString();
     }
 
     // Implementation using Volley library
@@ -145,9 +144,9 @@ public class MainActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
 
                 // Adding All values to Params.
-                params.put("name", GetName);
-                params.put("email", GetEmail);
-                params.put("website", GetWebsite);
+                params.put("name", nameInsert);
+                params.put("email", emailInsert);
+                params.put("website", websitelInsert);
 
                 return params;
             }
@@ -160,20 +159,21 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void getData(){
-        Log.d("debug", "HERE 2");
+        if(log) Log.d("debug", "HERE 2");
         StringRequest stringRequest = new StringRequest("https://android-db-js5898.c9users.io/select_data.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        JSONObject j = null;
-                        Log.d("debug", "HERE 3: Response: " + response);
+                        JSONObject j;
+
+                        if(log) Log.d("debug", "HERE 3: Response: " + response);
                         try {
-                            Log.d("debug", "HERE 4 - TRY?");
+                            if(log) Log.d("debug", "HERE 4 - TRY?");
                             j = new JSONObject(response);
                             result = j.getJSONArray(com.jan.dbtest.Config.JSON_ARRAY);
                             parseJSON(result);
                         } catch (JSONException e) {
-                            Log.d("debug", "HERE 4 - Exception?");
+                            if(log) Log.d("debug", "HERE 4 - Exception?");
                             e.printStackTrace();
                         }
                     }
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("debug", "On Error Listener: " + error);
+                        if(log) Log.d("debug", "On Error Listener: " + error);
                     }
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -190,13 +190,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void parseJSON(JSONArray j){
-        Log.d("debug", "Here, being called");
+        if(log) Log.d("debug", "Here, being called");
         textView1.setText("");
         for(int i=0;i<j.length();i++){
             try {
                 JSONObject json = j.getJSONObject(i);
                 //students.add(json.getString(com.jan.dbselect.Config.TAG_ID));
-                Log.d("debug", "Vrstica: " + json.getString(com.jan.dbtest.Config.TAG_ID));
+                if(log)  Log.d("debug", "Vrstica: " + json.getString(com.jan.dbtest.Config.TAG_ID));
 
                 textView1.append(
                         json.getString(Config.TAG_ID) + "\n" +
