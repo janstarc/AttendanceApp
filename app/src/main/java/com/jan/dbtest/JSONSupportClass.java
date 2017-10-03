@@ -1,6 +1,6 @@
 package com.jan.dbtest;
 
-public class Config {
+public class JSONSupportClass {
 
     //Tags used in the JSON String
     public static final String TAG_ID = "id";
