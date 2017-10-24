@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     String nameInsert;
     String emailInsert;
-    String websitelInsert;
+    String websiteInsert;
 
     Button buttonSubmit;
 
@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView1;
     private Button buttonGet;
     boolean log = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +55,7 @@ public class MainActivity extends AppCompatActivity {
         buttonSubmit = (Button)findViewById(R.id.insertContentButton);
         textView1 = (TextView)findViewById(R.id.textView1);
         buttonGet = (Button)findViewById(R.id.getContentButton);
-
-        // Submit data
         buttonSubmit.setOnClickListener(submitDataClicked);
-
-        // Get data
         buttonGet.setOnClickListener(getDataClicked);
 
     }
@@ -88,39 +83,39 @@ public class MainActivity extends AppCompatActivity {
 
         nameInsert = editTextName.getText().toString();
         emailInsert = editTextEmail.getText().toString();
-        websitelInsert = editTextWebsite.getText().toString();
+        websiteInsert = editTextWebsite.getText().toString();
     }
 
     // Implementation using Volley library
     private void SendData(){
 
-        // Creating Volley RequestQueue.
+        // Creating Volley RequestQueue
         RequestQueue requestQueue;
 
-        // Creating Progress dialog.
+        // Creating Progress dialog
         final ProgressDialog progressDialog;
 
         // Storing server url into String variable.
         String HttpUrl = "https://android-db-js5898.c9users.io/insert_data.php";
 
-        // Creating Volley newRequestQueue .
+        // Creating Volley newRequestQueue
         requestQueue = Volley.newRequestQueue(MainActivity.this);
         progressDialog = new ProgressDialog(MainActivity.this);
 
-        // Showing progress dialog at user registration time.
+        // Showing progress dialog at user registration time
         progressDialog.setMessage("Please Wait, We are Inserting Your Data on Server");
         progressDialog.show();
 
-        // Creating string request with post method.
+        // Creating string request with post method
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HttpUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String ServerResponse) {
 
-                        // Hiding the progress dialog after all task complete.
+                        // Hiding the progress dialog after all task complete
                         progressDialog.dismiss();
 
-                        // Showing response message coming from server.
+                        // Showing response message coming from server
                         Toast.makeText(MainActivity.this, ServerResponse, Toast.LENGTH_LONG).show();
                     }
                 },
@@ -130,11 +125,11 @@ public class MainActivity extends AppCompatActivity {
 
                         // Hiding the progress dialog after all task complete.
                         progressDialog.dismiss();
-
-                        // Showing error message if something goes wrong.
                         Toast.makeText(MainActivity.this, volleyError.toString(), Toast.LENGTH_LONG).show();
                     }
-                }) {
+                })
+
+        {
             @Override
             protected Map<String, String> getParams() {
 
@@ -144,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 // Adding All values to Params.
                 params.put("name", nameInsert);
                 params.put("email", emailInsert);
-                params.put("website", websitelInsert);
+                params.put("website", websiteInsert);
 
                 return params;
             }
@@ -154,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
         // Adding the StringRequest object into requestQueue.
         requestQueue.add(stringRequest);
     }
-
 
     private void getData(){
         if(log) Log.d("debug", "HERE 2");
@@ -168,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             if(log) Log.d("debug", "HERE 4 - TRY?");
                             j = new JSONObject(response);
-                            result = j.getJSONArray(com.jan.dbtest.Config.JSON_ARRAY);
+                            result = j.getJSONArray(com.jan.dbtest.JSONSupportClass.JSON_ARRAY);
                             parseJSON(result);
                         } catch (JSONException e) {
                             if(log) Log.d("debug", "HERE 4 - Exception?");
@@ -193,15 +187,15 @@ public class MainActivity extends AppCompatActivity {
         for(int i=0;i<j.length();i++){
             try {
                 JSONObject json = j.getJSONObject(i);
-                //students.add(json.getString(com.jan.dbselect.Config.TAG_ID));
-                if(log)  Log.d("debug", "Vrstica: " + json.getString(com.jan.dbtest.Config.TAG_ID));
+                //students.add(json.getString(com.jan.dbselect.JSONSupportClass.TAG_ID));
+                if(log)  Log.d("debug", "Vrstica: " + json.getString(com.jan.dbtest.JSONSupportClass.TAG_ID));
 
                 textView1.append(
-                        json.getString(Config.TAG_ID) + "\n" +
-                                json.getString(Config.TAG_NAME) + "\n" +
-                                json.getString(Config.TAG_EMAIL) + "\n" +
-                                json.getString(Config.TAG_WEBSITE) + "\n" +
-                                json.getString(Config.TAG_REGDATE) + "\n------------------\n");
+                        json.getString(JSONSupportClass.TAG_ID) + "\n" +
+                                json.getString(JSONSupportClass.TAG_NAME) + "\n" +
+                                json.getString(JSONSupportClass.TAG_EMAIL) + "\n" +
+                                json.getString(JSONSupportClass.TAG_WEBSITE) + "\n" +
+                                json.getString(JSONSupportClass.TAG_REGDATE) + "\n------------------\n");
 
             } catch (JSONException e) {
                 e.printStackTrace();
