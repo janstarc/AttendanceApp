@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/editText1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/enter_your_name" >
-    </EditText>
+        android:hint="@string/enter_your_name"></EditText>
 
     <EditText
         android:id="@+id/editText2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:inputType="textPassword"
         android:hint="@string/enter_your_email" />
 
     <EditText
         android:id="@+id/editText3"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:baselineAligned="false"
         android:ems="10"
         android:hint="@string/enter_your_website" />
 
@@ -36,6 +38,21 @@
         android:layout_width="193dp"
         android:layout_height="wrap_content"
         android:text="@string/get_content_from_db" />
+
+
+    <TextView
+        android:id="@+id/locationGPS"
+        android:layout_width="1100px"
+        android:layout_height="wrap_content"
+        android:text="Waiting for GPS location..." />
+
+    <TextView
+        android:id="@+id/locationNetwork"
+        android:layout_width="1100px"
+        android:layout_height="wrap_content"
+        android:text="Waiting for network location..." />
+
+
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

@@ -1,7 +1,16 @@
 package com.jan.dbtest;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -24,16 +33,17 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LocationListener {
 
     // Insert part
+    Context context = this;
     EditText editTextName;
     EditText editTextEmail;
     EditText editTextWebsite;
 
-    String nameInsert;
-    String emailInsert;
-    String websiteInsert;
+    String usernameInsert;
+    String passwordInsert;
+    String uniqueCodeInsert;
 
     Button buttonSubmit;
 
@@ -41,7 +51,25 @@ public class MainActivity extends AppCompatActivity {
     private JSONArray result;
     private TextView textView1;
     private Button buttonGet;
+    private Button getCoordinates;
     boolean log = false;
+
+
+    // GPS Start
+    private TextView locationGPS;
+    private TextView locationNetwork;
+    private Boolean InformationObtained;
+    private LocationManager locationManagerGPS;
+    private LocationManager locationManagerNetwork;
+
+    private static final String[] LOCATION_PERMS={
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+    private static final int INITIAL_REQUEST=1337;
+    private static final int LOCATION_REQUEST=INITIAL_REQUEST+3;
+
+    // GPS End
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +85,93 @@ public class MainActivity extends AppCompatActivity {
         buttonGet = (Button)findViewById(R.id.getContentButton);
         buttonSubmit.setOnClickListener(submitDataClicked);
         buttonGet.setOnClickListener(getDataClicked);
+        /*
+        getCoordinates = (Button) findViewById(R.id.getCoordinates);
+        getCoordinates.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startGpsActivity();
+            }
+        });
+        */
+
+
+        // GPS START
+
+        // GPS Permission check --> If permission not granted (Android 6.0+), ask for permission
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            Log.d("gps", "Here - permission issue");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(LOCATION_PERMS, LOCATION_REQUEST);
+            }
+            return;
+        }
+
+
+        locationGPS = (TextView) findViewById(R.id.locationGPS);
+        locationNetwork = (TextView) findViewById(R.id.locationNetwork);
+        locationManagerGPS = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManagerNetwork = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        // GPS END
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // GPS Permission check --> If permission not granted (Android 6.0+), ask for permission
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            Log.d("gps", "Here - permission issue");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(LOCATION_PERMS, LOCATION_REQUEST);
+                // TODO First install issue!
+            }
+
+            return;
+        } else {
+            // GPS Settings
+            this.locationManagerGPS.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1, this);
+            this.locationManagerNetwork.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 400, 1, this);
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+
+        if(location.getProvider().equals(LocationManager.GPS_PROVIDER)){
+            locationGPS.setText("GPS--> Lat: " + location.getLatitude() + " Long: " + location.getLongitude() + " Accur: " + location.getAccuracy());
+        }
+
+        if(location.getProvider().equals(LocationManager.NETWORK_PROVIDER)){
+            locationNetwork.setText("Net --> Lat: " + location.getLatitude() + " Long: " + location.getLongitude() + " Accur: " + location.getAccuracy());
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if(location.isFromMockProvider()){
+                Log.d("mock", "Location from mock provider!");
+            }
+        }
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
 
@@ -81,9 +196,9 @@ public class MainActivity extends AppCompatActivity {
     // Support function, just to set values of already declared Strings
     public void GetDataFromEditText(){
 
-        nameInsert = editTextName.getText().toString();
-        emailInsert = editTextEmail.getText().toString();
-        websiteInsert = editTextWebsite.getText().toString();
+        usernameInsert = editTextName.getText().toString();
+        passwordInsert = editTextEmail.getText().toString();
+        uniqueCodeInsert = editTextWebsite.getText().toString();
     }
 
     // Implementation using Volley library
@@ -96,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         final ProgressDialog progressDialog;
 
         // Storing server url into String variable.
-        String HttpUrl = "https://android-db-js5898.c9users.io/insert_data.php";
+        String HttpUrl = "https://attendance-system-server-js5898.c9users.io/insert_data.1.php";
 
         // Creating Volley newRequestQueue
         requestQueue = Volley.newRequestQueue(MainActivity.this);
@@ -130,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
                 })
 
         {
+            // Parameters for the hash map --> The ones read by PHP script
             @Override
             protected Map<String, String> getParams() {
 
@@ -137,9 +253,12 @@ public class MainActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
 
                 // Adding All values to Params.
-                params.put("name", nameInsert);
-                params.put("email", emailInsert);
-                params.put("website", websiteInsert);
+                params.put("username", usernameInsert);
+
+                // String hashed = BCrypt.hashpw(passwordInsert, BCrypt.gensalt());
+                //Log.d("Hash", "HashedPass: " + passwordInsert);
+                params.put("password", passwordInsert);
+                params.put("uniqueCode", uniqueCodeInsert);
 
                 return params;
             }
@@ -152,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getData(){
         if(log) Log.d("debug", "HERE 2");
-        StringRequest stringRequest = new StringRequest("https://android-db-js5898.c9users.io/select_data.php",
+        StringRequest stringRequest = new StringRequest("https://attendance-system-server-js5898.c9users.io/select_data.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
