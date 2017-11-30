@@ -11,4 +11,8 @@
     <string name="location">Location</string>
     <string name="get_loaction">Get Loaction</string>
     <string name="get_coordinates">Get Coordinates</string>
+    <string name="qrscanner">QRScanner</string>
+    <string name="qrscanner_2">QRScanner 2</string>
+    <string name="enter_your_username_and_password">Enter your username and password</string>
+    <string name="login">Login</string>
 </resources>

@@ -4,10 +4,12 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -70,12 +72,29 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     // GPS End
 
+    // QRScanner
+    private Button QRScannerButton;
+    private Button QRScanner2Button;
+
+    // Login
+    private Button loginActivityButton;
+
+    // SharedPreferences
+    private SharedPreferences.Editor editor;
+    private SharedPreferences prefs;
+    private static final String MY_PREFS_FILE = "MyPrefsFile";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        prefs = getSharedPreferences(MY_PREFS_FILE, MODE_PRIVATE);
+        editor = getSharedPreferences(MY_PREFS_FILE, MODE_PRIVATE).edit();
+        checkLogin();
 
         editTextName = (EditText)findViewById(R.id.editText1);
         editTextEmail = (EditText)findViewById(R.id.editText2);
@@ -85,16 +104,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         buttonGet = (Button)findViewById(R.id.getContentButton);
         buttonSubmit.setOnClickListener(submitDataClicked);
         buttonGet.setOnClickListener(getDataClicked);
-        /*
-        getCoordinates = (Button) findViewById(R.id.getCoordinates);
-        getCoordinates.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startGpsActivity();
-            }
-        });
-        */
-
 
         // GPS START
 
@@ -116,13 +125,66 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         // GPS END
 
+        // QR Code start
+        QRScannerButton = (Button) findViewById(R.id.QRScannerButton);
+        QRScannerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, QRScanner.class);
+                context.startActivity(intent);
+            }
+        });
+
+        QRScanner2Button = (Button) findViewById(R.id.QRScanner2Button);
+        QRScanner2Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+
+                    Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                    intent.putExtra("SCAN_MODE", "QR_CODE_MODE"); // "PRODUCT_MODE for bar codes
+
+                    startActivityForResult(intent, 0);
+
+                } catch (Exception e) {
+
+                    Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
+                    Intent marketIntent = new Intent(Intent.ACTION_VIEW,marketUri);
+                    startActivity(marketIntent);
+
+                }
+            }
+        });
+        // QR Code End
+
+        loginActivityButton = (Button) findViewById(R.id.loginActivityButton);
+        loginActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, LoginActivity.class);
+                context.startActivity(intent);
+            }
+        });
 
     }
+
+    public void checkLogin(){
+
+        if(prefs.getInt("user_id", -1) == -1){
+            Intent intent = new Intent(context, LoginActivity.class);
+            context.startActivity(intent);
+        } else {
+            // TODO Part to delete
+            Log.d("userData", "Username: " + prefs.getString("username", null) + " | Password: " + prefs.getString("password", null) + " | UserId: " + prefs.getInt("user_id", -1));
+        }
+    }
+
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        checkLogin();
         // GPS Permission check --> If permission not granted (Android 6.0+), ask for permission
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
@@ -138,6 +200,24 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             this.locationManagerGPS.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1, this);
             this.locationManagerNetwork.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 400, 1, this);
         }
+    }
+
+
+    // Result from QRScanner2 --> Calls external app
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0) {
+
+            if (resultCode == RESULT_OK) {
+                String contents = data.getStringExtra("SCAN_RESULT");
+                Log.d("result", "Contents: " + contents);
+            }
+            if(resultCode == RESULT_CANCELED){
+                //handle cancel
+            }
+        }
+
     }
 
     @Override
@@ -282,6 +362,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                             if(log) Log.d("debug", "HERE 4 - TRY?");
                             j = new JSONObject(response);
                             result = j.getJSONArray(com.jan.dbtest.JSONSupportClass.JSON_ARRAY);
+                            Log.d("ServerResponse", result.toString());
                             parseJSON(result);
                         } catch (JSONException e) {
                             if(log) Log.d("debug", "HERE 4 - Exception?");
@@ -311,10 +392,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
                 textView1.append(
                         json.getString(JSONSupportClass.TAG_ID) + "\n" +
-                                json.getString(JSONSupportClass.TAG_NAME) + "\n" +
-                                json.getString(JSONSupportClass.TAG_EMAIL) + "\n" +
-                                json.getString(JSONSupportClass.TAG_WEBSITE) + "\n" +
-                                json.getString(JSONSupportClass.TAG_REGDATE) + "\n------------------\n");
+                        json.getString(JSONSupportClass.TAG_NAME) + "\n" +
+                        json.getString(JSONSupportClass.TAG_EMAIL) + "\n" +
+                        json.getString(JSONSupportClass.TAG_WEBSITE) + "\n" +
+                        json.getString(JSONSupportClass.TAG_REGDATE) + "\n------------------\n");
 
             } catch (JSONException e) {
                 e.printStackTrace();

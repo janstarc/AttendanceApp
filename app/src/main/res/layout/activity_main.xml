@@ -9,7 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/enter_your_name"></EditText>
+        android:hint="@string/enter_your_name"/>
 
     <EditText
         android:id="@+id/editText2"
@@ -28,6 +28,18 @@
         android:hint="@string/enter_your_website" />
 
     <Button
+        android:id="@+id/QRScannerButton"
+        android:layout_width="193dp"
+        android:layout_height="wrap_content"
+        android:text="@string/qrscanner" />
+
+    <Button
+        android:id="@+id/QRScanner2Button"
+        android:layout_width="193dp"
+        android:layout_height="wrap_content"
+        android:text="@string/qrscanner_2" />
+
+    <Button
         android:id="@+id/insertContentButton"
         android:layout_width="193dp"
         android:layout_height="wrap_content"
@@ -38,6 +50,12 @@
         android:layout_width="193dp"
         android:layout_height="wrap_content"
         android:text="@string/get_content_from_db" />
+
+    <Button
+        android:id="@+id/loginActivityButton"
+        android:layout_width="193dp"
+        android:layout_height="wrap_content"
+        android:text="@string/login" />
 
 
     <TextView

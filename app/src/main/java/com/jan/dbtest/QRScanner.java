@@ -1,8 +1,5 @@
 package com.jan.dbtest;
 
-
-/*
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -30,6 +28,14 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+
+/*
+
+http://www.truiton.com/2016/09/android-example-programmatically-scan-qr-code-and-bar-code/
+https://github.com/Truiton/MobileVisionAPI/tree/master/QRCode/app/src/main/res/xml
+https://stackoverflow.com/questions/8831050/android-how-to-read-qr-code-in-my-application
+
+ */
 
 public class QRScanner extends AppCompatActivity {
     private static final String LOG_TAG = "Barcode Scanner API";
@@ -54,7 +60,8 @@ public class QRScanner extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityCompat.requestPermissions(MainActivity.this, new
+                Log.d("Permission", "Permission granted?");
+                ActivityCompat.requestPermissions(QRScanner.this, new
                         String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
             }
         });
@@ -76,10 +83,27 @@ public class QRScanner extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     takePicture();
                 } else {
-                    Toast.makeText(MainActivity.this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+
+                    Log.d("perm", "In else part");
+                    ActivityCompat.requestPermissions(QRScanner.this,
+                            new String[]{ Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    //Toast.makeText(QRScanner.this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+                    //requestForSpecificPermission();
+
+                    /*
+                    if(ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                            && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        Log.d("permission", "HERE");
+                        ActivityCompat.requestPermissions(QRScanner.this,
+                                new String[]{ Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                        return;
+
+                    }
+                    */
                 }
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -155,7 +179,7 @@ public class QRScanner extends AppCompatActivity {
     private void takePicture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File photo = new File(Environment.getExternalStorageDirectory(), "picture.jpg");
-        imageUri = FileProvider.getUriForFile(MainActivity.this,
+        imageUri = FileProvider.getUriForFile(QRScanner.this,
                 BuildConfig.APPLICATION_ID + ".provider", photo);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(intent, PHOTO_REQUEST);
@@ -193,5 +217,3 @@ public class QRScanner extends AppCompatActivity {
                 .openInputStream(uri), null, bmOptions);
     }
 }
-
-*/

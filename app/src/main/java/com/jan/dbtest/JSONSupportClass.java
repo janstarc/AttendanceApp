@@ -11,4 +11,7 @@ public class JSONSupportClass {
 
     //JSON array name
     public static final String JSON_ARRAY = "result";
+
+    // Username
+    public static final String USER_ID = "user_id";
 }
