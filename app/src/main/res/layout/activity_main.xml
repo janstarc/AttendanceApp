@@ -4,28 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/welcMessage"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/enter_your_name"/>
-
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:hint="@string/enter_your_email" />
-
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:ems="10"
-        android:hint="@string/enter_your_website" />
+        android:text="Welcome message" />
 
     <Button
         android:id="@+id/QRScannerButton"

@@ -31,29 +31,23 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
+    private TextView welcomeMessage;
     // Insert part
     Context context = this;
-    EditText editTextName;
-    EditText editTextEmail;
-    EditText editTextWebsite;
-
-    String usernameInsert;
-    String passwordInsert;
-    String uniqueCodeInsert;
-
+    String uniqueCode = null;
     Button buttonSubmit;
 
     // Select part
     private JSONArray result;
     private TextView textView1;
     private Button buttonGet;
-    private Button getCoordinates;
     boolean log = false;
 
 
@@ -70,6 +64,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private static final int INITIAL_REQUEST=1337;
     private static final int LOCATION_REQUEST=INITIAL_REQUEST+3;
 
+    private double latitude = -1;
+    private double longitude = -1;
+    private double accuracy = -1;
+
     // GPS End
 
     // QRScanner
@@ -84,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private SharedPreferences prefs;
     private static final String MY_PREFS_FILE = "MyPrefsFile";
 
+    boolean QRSuccess = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,11 +94,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         prefs = getSharedPreferences(MY_PREFS_FILE, MODE_PRIVATE);
         editor = getSharedPreferences(MY_PREFS_FILE, MODE_PRIVATE).edit();
+        welcomeMessage = (TextView) findViewById(R.id.welcMessage);
         checkLogin();
+        setWelcomeMessage();
 
-        editTextName = (EditText)findViewById(R.id.editText1);
-        editTextEmail = (EditText)findViewById(R.id.editText2);
-        editTextWebsite = (EditText)findViewById(R.id.editText3);
         buttonSubmit = (Button)findViewById(R.id.insertContentButton);
         textView1 = (TextView)findViewById(R.id.textView1);
         buttonGet = (Button)findViewById(R.id.getContentButton);
@@ -139,22 +138,26 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         QRScanner2Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                QRSuccess = false;
                 try {
 
                     Intent intent = new Intent("com.google.zxing.client.android.SCAN");
                     intent.putExtra("SCAN_MODE", "QR_CODE_MODE"); // "PRODUCT_MODE for bar codes
-
                     startActivityForResult(intent, 0);
+
 
                 } catch (Exception e) {
 
                     Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
                     Intent marketIntent = new Intent(Intent.ACTION_VIEW,marketUri);
                     startActivity(marketIntent);
-
                 }
+
+
             }
         });
+        
         // QR Code End
 
         loginActivityButton = (Button) findViewById(R.id.loginActivityButton);
@@ -168,14 +171,44 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     }
 
+    // Result from QRScanner2 --> Calls external app
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0) {
+
+            if (resultCode == RESULT_OK) {
+
+                uniqueCode = data.getStringExtra("SCAN_RESULT");
+                Log.d("result", "UniqueCode scanned: " + uniqueCode);
+                Toast.makeText(context, "UniqueCode: " + uniqueCode, Toast.LENGTH_LONG).show();
+
+                QRSuccess = true;
+            }
+            if(resultCode == RESULT_CANCELED){
+                //handle cancel
+            }
+
+            //welcomeMessage.append("AAAAA");
+            setWelcomeMessage();
+        }
+
+    }
+
+    public void setWelcomeMessage(){
+        welcomeMessage.setText("Welcome, " + prefs.getString("username", null));
+        if(uniqueCode != null) welcomeMessage.append(" (" + uniqueCode + ")");
+    }
+
     public void checkLogin(){
 
         if(prefs.getInt("user_id", -1) == -1){
             Intent intent = new Intent(context, LoginActivity.class);
             context.startActivity(intent);
         } else {
-            // TODO Part to delete
+
             Log.d("userData", "Username: " + prefs.getString("username", null) + " | Password: " + prefs.getString("password", null) + " | UserId: " + prefs.getInt("user_id", -1));
+            //welcomeMessage.append("Welcome, " + prefs.getString("username", null));
         }
     }
 
@@ -202,34 +235,49 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
-
-    // Result from QRScanner2 --> Calls external app
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0) {
-
-            if (resultCode == RESULT_OK) {
-                String contents = data.getStringExtra("SCAN_RESULT");
-                Log.d("result", "Contents: " + contents);
-            }
-            if(resultCode == RESULT_CANCELED){
-                //handle cancel
-            }
-        }
-
-    }
-
     @Override
     public void onLocationChanged(Location location) {
 
 
         if(location.getProvider().equals(LocationManager.GPS_PROVIDER)){
             locationGPS.setText("GPS--> Lat: " + location.getLatitude() + " Long: " + location.getLongitude() + " Accur: " + location.getAccuracy());
+
+            // First info
+            if(accuracy == -1 && longitude == -1 && latitude == -1){
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                accuracy = location.getAccuracy();
+                Log.d("findLocation", "First GPS location. " + longitude + " " + latitude + " " + accuracy + "m");
+            }
+
+            // When you get better information
+            double accuracyNew = location.getAccuracy();            // Check if the new location is more accurate
+            if(accuracy != -1 && accuracyNew < accuracy){
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                accuracy = accuracyNew;
+                Log.d("findLocation", "Improved GPS location. " + longitude + " " + latitude + " " + accuracy + "m");
+            }
+
         }
 
         if(location.getProvider().equals(LocationManager.NETWORK_PROVIDER)){
             locationNetwork.setText("Net --> Lat: " + location.getLatitude() + " Long: " + location.getLongitude() + " Accur: " + location.getAccuracy());
+
+            if(accuracy == -1 && longitude == -1 && latitude == -1){
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                accuracy = location.getAccuracy();
+                Log.d("findLocation", "First NET location. " + longitude + " " + latitude + " " + accuracy + "m");
+            }
+
+            double accuracyNew = location.getAccuracy();            // Check if the new location is more accurate
+            if(accuracy != -1 && accuracyNew < accuracy){
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                accuracy = accuracyNew;
+                Log.d("findLocation", "Improved NET location. " + longitude + " " + latitude + " " + accuracy + "m");
+            }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -260,8 +308,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         @Override
         public void onClick(View v){
-            GetDataFromEditText();
-            SendData();
+            //GetDataFromEditText();
+            int checkDataReturn = checkData();
+
+            if(checkDataReturn == 0){
+                addToLesson();
+            } else if (checkDataReturn == 1){
+                Toast.makeText(context, "Your location is not accurate enough. Try again in a few seconds", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(context, "Please scan the QR code again!", Toast.LENGTH_LONG).show();
+            }
+
         }
     };
 
@@ -273,16 +330,20 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
     };
 
-    // Support function, just to set values of already declared Strings
-    public void GetDataFromEditText(){
+    public int checkData(){
 
-        usernameInsert = editTextName.getText().toString();
-        passwordInsert = editTextEmail.getText().toString();
-        uniqueCodeInsert = editTextWebsite.getText().toString();
+        if(uniqueCode != null && uniqueCode.length() == 6 && longitude != -1 && latitude != -1 && accuracy != -1 && accuracy < 80){
+            return 0;
+        } else if(uniqueCode != null && uniqueCode.length() == 6){      // Location problem
+            return 1;
+        } else {                                                        // Unique code scan problem
+            return 2;
+        }
+
     }
 
     // Implementation using Volley library
-    private void SendData(){
+    private void addToLesson(){
 
         // Creating Volley RequestQueue
         RequestQueue requestQueue;
@@ -333,12 +394,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 Map<String, String> params = new HashMap<>();
 
                 // Adding All values to Params.
-                params.put("username", usernameInsert);
-
-                // String hashed = BCrypt.hashpw(passwordInsert, BCrypt.gensalt());
-                //Log.d("Hash", "HashedPass: " + passwordInsert);
-                params.put("password", passwordInsert);
-                params.put("uniqueCode", uniqueCodeInsert);
+                params.put("username", prefs.getString("username", null));
+                params.put("password", prefs.getString("password", null));
+                params.put("uniqueCode", uniqueCode);
+                params.put("latitude", Double.toString(latitude));
+                params.put("longitude", Double.toString(longitude));
 
                 return params;
             }

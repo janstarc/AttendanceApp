@@ -3,6 +3,7 @@ package com.jan.dbtest;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -46,16 +47,27 @@ public class QRScanner extends AppCompatActivity {
     private static final int REQUEST_WRITE_PERMISSION = 20;
     private static final String SAVED_INSTANCE_URI = "uri";
     private static final String SAVED_INSTANCE_RESULT = "result";
+    private boolean scanSuccess = false;
+
+    // SharedPreferences
+    private SharedPreferences.Editor editor;
+    private SharedPreferences prefs;
+    private static final String MY_PREFS_FILE = "MyPrefsFile";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.qr_scanner);
+
+        prefs = getSharedPreferences(MY_PREFS_FILE, MODE_PRIVATE);
+        editor = getSharedPreferences(MY_PREFS_FILE, MODE_PRIVATE).edit();
         Button button = (Button) findViewById(R.id.button);
         scanResults = (TextView) findViewById(R.id.scan_results);
         if (savedInstanceState != null) {
             imageUri = Uri.parse(savedInstanceState.getString(SAVED_INSTANCE_URI));
             scanResults.setText(savedInstanceState.getString(SAVED_INSTANCE_RESULT));
+            if(scanSuccess) editor.putString("uniqueCode", scanResults.toString());
+
         }
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +129,7 @@ public class QRScanner extends AppCompatActivity {
                     for (int index = 0; index < barcodes.size(); index++) {
                         Barcode code = barcodes.valueAt(index);
                         scanResults.setText(scanResults.getText() + code.displayValue + "\n");
+                        scanSuccess = true;
 
                         //Required only if you need to extract the type of barcode
                         int type = barcodes.valueAt(index).valueFormat;
