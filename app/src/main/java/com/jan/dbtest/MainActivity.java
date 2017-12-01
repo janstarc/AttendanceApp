@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     boolean QRSuccess = false;
 
+    private Button gotoAddToLesson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +166,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, LoginActivity.class);
+                context.startActivity(intent);
+            }
+        });
+
+        gotoAddToLesson =  (Button) findViewById(R.id.addToLessonActivity);
+        gotoAddToLesson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, addToLesson.class);
                 context.startActivity(intent);
             }
         });
