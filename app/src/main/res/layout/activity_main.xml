@@ -11,24 +11,6 @@
         android:text="Welcome message" />
 
     <Button
-        android:id="@+id/QRScannerButton"
-        android:layout_width="193dp"
-        android:layout_height="wrap_content"
-        android:text="@string/qrscanner" />
-
-    <Button
-        android:id="@+id/QRScanner2Button"
-        android:layout_width="193dp"
-        android:layout_height="wrap_content"
-        android:text="@string/qrscanner_2" />
-
-    <Button
-        android:id="@+id/insertContentButton"
-        android:layout_width="193dp"
-        android:layout_height="wrap_content"
-        android:text="@string/submit_data_to_server" />
-
-    <Button
         android:id="@+id/getContentButton"
         android:layout_width="193dp"
         android:layout_height="wrap_content"
@@ -43,7 +25,7 @@
 
     <Button
         android:id="@+id/addToLessonActivity"
-        android:layout_width="match_parent"
+        android:layout_width="192dp"
         android:layout_height="wrap_content"
         android:text="Goto addToLesson" />
 
