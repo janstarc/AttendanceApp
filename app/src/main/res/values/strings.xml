@@ -15,8 +15,11 @@
     <string name="qrscanner_2">QRScanner 2</string>
     <string name="enter_your_username_and_password">Enter your username and password</string>
     <string name="login">Login</string>
-    <string name="add_to_lesson">Add to lesson</string>
+    <string name="add_to_lesson">Check-In to lesson</string>
     <string name="authentication">Authentication:</string>
     <string name="lesson_code">Lesson code:</string>
     <string name="location2">Location:</string>
+    <string name="attendnce_check">Attendnce check</string>
+    <string name="get_courses_from_server">TEST: Get courses from server</string>
+    <string name="load_lessons">Load lessons</string>
 </resources>

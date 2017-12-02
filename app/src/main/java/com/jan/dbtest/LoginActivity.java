@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                 password = passwordET.getText().toString();
                 editor.putString("username", username);
                 editor.putString("password", password);
-                editor.putInt("user_id", -1);
+                editor.putString("user_id", null);
                 editor.apply();
 
                 login();
@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         Log.d("ServerResponse", "User_ID --> " + ServerResponse);
                         try {
-                            editor.putInt("user_id", Integer.parseInt(ServerResponse));
+                            editor.putString("user_id", ServerResponse);
                             editor.apply();
                             loginSuccess = true;
                         } catch (NumberFormatException e) {

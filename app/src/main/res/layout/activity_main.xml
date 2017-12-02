@@ -11,37 +11,31 @@
         android:text="Welcome message" />
 
     <Button
-        android:id="@+id/getContentButton"
+        android:id="@+id/addToLessonActivity"
+        android:layout_width="192dp"
+        android:layout_height="wrap_content"
+        android:text="Lesson Check-In"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/attendanceCheckButton"
         android:layout_width="193dp"
         android:layout_height="wrap_content"
-        android:text="@string/get_content_from_db" />
+        android:text="@string/attendnce_check"
+        android:textAllCaps="false" />
 
     <Button
         android:id="@+id/loginActivityButton"
         android:layout_width="193dp"
         android:layout_height="wrap_content"
+        android:textAllCaps="false"
         android:text="@string/login" />
 
-
     <Button
-        android:id="@+id/addToLessonActivity"
-        android:layout_width="192dp"
+        android:id="@+id/getContentButton"
+        android:layout_width="193dp"
         android:layout_height="wrap_content"
-        android:text="Goto addToLesson" />
-
-    <TextView
-        android:id="@+id/locationGPS"
-        android:layout_width="1100px"
-        android:layout_height="wrap_content"
-        android:text="Waiting for GPS location..." />
-
-    <TextView
-        android:id="@+id/locationNetwork"
-        android:layout_width="1100px"
-        android:layout_height="wrap_content"
-        android:text="Waiting for network location..." />
-
-
+        android:text="@string/get_content_from_db" />
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -62,5 +56,4 @@
 
         </TableLayout>
     </ScrollView>
-
 </LinearLayout>

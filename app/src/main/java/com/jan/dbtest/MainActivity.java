@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String MY_PREFS_FILE = "MyPrefsFile";
 
     private Button gotoAddToLesson;
+    private Button gotoAttendanceCheck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +73,19 @@ public class MainActivity extends AppCompatActivity {
         gotoAddToLesson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, addToLesson.class);
+                Intent intent = new Intent(context, checkIn.class);
                 context.startActivity(intent);
             }
         });
 
+        gotoAttendanceCheck = (Button) findViewById(R.id.attendanceCheckButton);
+        gotoAttendanceCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, attendanceCheck.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     public void setWelcomeMessage(){
@@ -85,11 +94,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void checkLogin(){
 
-        if(prefs.getInt("user_id", -1) == -1){
+        if(prefs.getString("user_id", null) == null){
             Intent intent = new Intent(context, LoginActivity.class);
             context.startActivity(intent);
         } else {
-            Log.d("userData", "Username: " + prefs.getString("username", null) + " | Password: " + prefs.getString("password", null) + " | UserId: " + prefs.getInt("user_id", -1));
+            Log.d("userData", "Username: " + prefs.getString("username", null) + " | Password: " + prefs.getString("password", null) + " | UserId: " + prefs.getString("user_id", null));
         }
     }
 

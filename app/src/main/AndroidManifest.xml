@@ -43,7 +43,8 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode"/>
 
-        <activity android:name=".addToLesson"/>
+        <activity android:name=".checkIn"/>
+        <activity android:name=".attendanceCheck"/>
     </application>
 
 </manifest>

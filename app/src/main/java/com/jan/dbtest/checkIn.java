@@ -32,7 +32,7 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
-public class addToLesson extends AppCompatActivity implements LocationListener {
+public class checkIn extends AppCompatActivity implements LocationListener {
 
 
     private Context context = this;
@@ -154,12 +154,12 @@ public class addToLesson extends AppCompatActivity implements LocationListener {
 
     public boolean checkLogin(){
 
-        if(prefs.getInt("user_id", -1) == -1){
+        if(prefs.getString("user_id", null) == null){
             Intent intent = new Intent(context, LoginActivity.class);
             context.startActivity(intent);
         } else {
 
-            Log.d("userData", "Username: " + prefs.getString("username", null) + " | Password: " + prefs.getString("password", null) + " | UserId: " + prefs.getInt("user_id", -1));
+            Log.d("userData", "Username: " + prefs.getString("username", null) + " | Password: " + prefs.getString("password", null) + " | UserId: " + prefs.getString("user_id", null));
             loginOKimage.setImageResource(R.drawable.ok_img);
             loginOK = true;
             return true;
@@ -359,14 +359,14 @@ public class addToLesson extends AppCompatActivity implements LocationListener {
         final ProgressDialog progressDialog;
 
         // Storing server url into String variable.
-        String HttpUrl = "https://attendance-system-server-js5898.c9users.io/insert_data.1.php";
+        String HttpUrl = "https://attendance-system-server-js5898.c9users.io/AndroidScripts/addToLesson.php";
 
         // Creating Volley newRequestQueue
-        requestQueue = Volley.newRequestQueue(addToLesson.this);
-        progressDialog = new ProgressDialog(addToLesson.this);
+        requestQueue = Volley.newRequestQueue(checkIn.this);
+        progressDialog = new ProgressDialog(checkIn.this);
 
         // Showing progress dialog at user registration time
-        progressDialog.setMessage("Please Wait, We are Inserting Your Data on Server");
+        progressDialog.setMessage("Please Wait, checking you in");
         progressDialog.show();
 
         // Creating string request with post method
@@ -379,7 +379,7 @@ public class addToLesson extends AppCompatActivity implements LocationListener {
                         progressDialog.dismiss();
 
                         // Showing response message coming from server
-                        Toast.makeText(addToLesson.this, ServerResponse, Toast.LENGTH_LONG).show();
+                        Toast.makeText(checkIn.this, ServerResponse, Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -388,7 +388,7 @@ public class addToLesson extends AppCompatActivity implements LocationListener {
 
                         // Hiding the progress dialog after all task complete.
                         progressDialog.dismiss();
-                        Toast.makeText(addToLesson.this, volleyError.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(checkIn.this, volleyError.toString(), Toast.LENGTH_LONG).show();
                     }
                 })
 
