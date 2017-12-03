@@ -212,7 +212,6 @@ public class checkIn extends AppCompatActivity implements LocationListener {
                 intent.putExtra("SCAN_MODE", "QR_CODE_MODE"); // "PRODUCT_MODE for bar codes
                 startActivityForResult(intent, 0);
 
-
             } catch (Exception e) {
 
                 Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
@@ -237,7 +236,6 @@ public class checkIn extends AppCompatActivity implements LocationListener {
                 } else {
                     Toast.makeText(context, "Scanned QR code does not contain lesson QR code", Toast.LENGTH_LONG).show();
                 }
-
             }
             if(resultCode == RESULT_CANCELED){
                 codeOK = false;
@@ -265,7 +263,7 @@ public class checkIn extends AppCompatActivity implements LocationListener {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
                 accuracy = location.getAccuracy();
-                Log.d("findLocation", "First GPS location. " + longitude + " " + latitude + " " + accuracy + "m");
+                Log.d("findLocation", "First GPS location. " + latitude + " " + longitude + " " + accuracy + "m");
                 checkLocation();
             }
 
@@ -275,20 +273,19 @@ public class checkIn extends AppCompatActivity implements LocationListener {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
                 accuracy = accuracyNew;
-                Log.d("findLocation", "Improved GPS location. " + longitude + " " + latitude + " " + accuracy + "m");
+                Log.d("findLocation", "Improved GPS location. " + latitude + " " + longitude + " " + accuracy + "m");
                 checkLocation();
             }
 
         }
 
         if(location.getProvider().equals(LocationManager.NETWORK_PROVIDER)){
-            //locationNetwork.setText("Net --> Lat: " + location.getLatitude() + " Long: " + location.getLongitude() + " Accur: " + location.getAccuracy());
 
             if(accuracy == -1 && longitude == -1 && latitude == -1){
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
                 accuracy = location.getAccuracy();
-                Log.d("findLocation", "First NET location. " + longitude + " " + latitude + " " + accuracy + "m");
+                Log.d("findLocation", "First NET location. " + latitude + " " + longitude + " " + accuracy + "m");
                 checkLocation();
             }
 
@@ -297,7 +294,7 @@ public class checkIn extends AppCompatActivity implements LocationListener {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
                 accuracy = accuracyNew;
-                Log.d("findLocation", "Improved NET location. " + longitude + " " + latitude + " " + accuracy + "m");
+                Log.d("findLocation", "Improved NET location. " + latitude + " " + longitude + " " + accuracy + "m");
                 checkLocation();
             }
         }
