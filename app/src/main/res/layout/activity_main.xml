@@ -32,6 +32,21 @@
         android:text="@string/login" />
 
     <Button
+        android:id="@+id/registration"
+        android:layout_width="192dp"
+        android:layout_height="wrap_content"
+        android:text="@string/register"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/registerToCourse"
+        android:layout_width="193dp"
+        android:layout_height="wrap_content"
+        android:text="@string/register_to_course"
+        android:textAllCaps="false"/>
+
+
+    <Button
         android:id="@+id/getContentButton"
         android:layout_width="193dp"
         android:layout_height="wrap_content"

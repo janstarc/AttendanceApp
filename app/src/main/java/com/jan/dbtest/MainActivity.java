@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button gotoAddToLesson;
     private Button gotoAttendanceCheck;
+    private Button registerToCourse;
+    private Button registration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +85,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, attendanceCheck.class);
+                context.startActivity(intent);
+            }
+        });
+
+        registerToCourse = (Button) findViewById(R.id.registerToCourse);
+        registerToCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, registerToCourse.class);
+                context.startActivity(intent);
+            }
+        });
+
+        registration = (Button) findViewById(R.id.registration);
+        registration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, registration.class);
                 context.startActivity(intent);
             }
         });

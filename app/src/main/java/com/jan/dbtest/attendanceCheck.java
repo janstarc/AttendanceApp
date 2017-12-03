@@ -25,12 +25,14 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 
 public class attendanceCheck extends AppCompatActivity implements Serializable {
@@ -39,11 +41,11 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
     private SharedPreferences.Editor editor;
     private SharedPreferences prefs;
     private static final String MY_PREFS_FILE = "MyPrefsFile";
-    private Button getDataFromServer;
     private TextView scrollViewText;
     private JSONArray result;
     private Spinner coursesSpinner;
     private Button loadLessons;
+    private TextView attendanceReport;
 
 
     private ListView myList;
@@ -60,6 +62,7 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
     private ArrayList<String> attendLessonsId = new ArrayList<>();
     private ArrayList<String> attendLessonsTitle = new ArrayList<>();
     private ArrayList<String> attendLessonsDescription = new ArrayList<>();
+    private int requiredAttendance = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,40 +72,30 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
         prefs = getSharedPreferences(MY_PREFS_FILE, MODE_PRIVATE);
         editor = getSharedPreferences(MY_PREFS_FILE, MODE_PRIVATE).edit();
 
-        getDataFromServer = (Button) findViewById(R.id.button2);
         scrollViewText = (TextView) findViewById(R.id.scrollViewText);
         myList = (ListView) findViewById(R.id.listView);
-
-        getDataFromServer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //getAllCourses();
-                String selectedCourseName = coursesSpinner.getSelectedItem().toString();
-                int selectedCourseIndex = courseNameList.indexOf(selectedCourseName);
-                Log.d("index", "Index of course: " + selectedCourseIndex);
-                String selectedCourseId = courseIdList.get(selectedCourseIndex);
-                Log.d("index", "Selected Course ID: " + selectedCourseId);
-                getAllLessons(selectedCourseId);
-
-                getAttendedLessons(selectedCourseId, prefs.getString("user_id", null));
-
-            }
-        });
+        attendanceReport = (TextView) findViewById(R.id.attendanceReport);
 
         coursesSpinner = (Spinner) findViewById(R.id.coursesSpinner);
         loadLessons = (Button) findViewById(R.id.loadLessonsButton);
         loadLessons.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(courseIdList.size() > 0) {
+                    String selectedCourseName = coursesSpinner.getSelectedItem().toString();
+                    Log.d("index1", "Selected Course Name: " + selectedCourseName);
+                    int selectedCourseIndex = courseNameList.indexOf(selectedCourseName);
+                    Log.d("index1", "Index of course: " + selectedCourseIndex);
+                    String selectedCourseId = courseIdList.get(selectedCourseIndex);
+                    Log.d("index1", "Selected Course ID: " + selectedCourseId);
 
-                try {
-                    updateListView();
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                    // Functions called in DAISY-CHAIN: getAllLessons(selectedCourseId, userId) --> getAttendedLessons(selectedCourseId, userId) --> updateListView()
+                    getAllLessons(selectedCourseId, prefs.getString("user_id", null));
                 }
-
             }
         });
+
+        //getAllCourses();
     }
 
     @Override
@@ -230,6 +223,19 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
                             Log.d("jsonError", "JSON Error");
                         }
 
+                        // TODO THREAD HANDLING
+                        try {
+                            updateListView();
+
+                            double attendedLessons = attendLessonsId.size();
+                            double allLessons = allLessonsId.size();
+                            double percent = (attendedLessons/allLessons)*100;
+                            int percentInt = (int) Math.floor(percent);
+
+                            attendanceReport.setText("You attended " + (int) attendedLessons + " out of " + (int) allLessons + " lessons (" + percentInt + "%) | Req: " + requiredAttendance + "%");
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -280,7 +286,7 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
                 attendLessonsId.add(json.getString("lesson_id"));
                 attendLessonsTitle.add(json.getString("lesson_title"));
                 attendLessonsDescription.add(json.getString("lesson_description"));
-
+                requiredAttendance = json.getInt("required_attendance");
                 /*
                 scrollViewText.append(
                         json.getString("course_id") + "\n" +
@@ -296,10 +302,11 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
         printResults("attendLessonID", attendLessonsId);
         printResults("attendLessonsTitle", attendLessonsTitle);
         printResults("attendLessonsDescription", attendLessonsDescription);
+        Log.d("queryResult", "Req attendance: " + requiredAttendance);
 
     }
 
-    private void getAllLessons(final String courseId){
+    private void getAllLessons(final String courseId, final String userId){
 
         allLessonsId = new ArrayList<>();
         allLessonsTitle = new ArrayList<>();
@@ -346,6 +353,9 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
                             e.printStackTrace();
                             Log.d("jsonError", "JSON Error");
                         }
+
+                        // TODO TRY TO AVOID THREAD HANDLING
+                        getAttendedLessons(courseId, userId);
 
                     }
                 },
@@ -457,6 +467,11 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
                             result = j.getJSONArray(com.jan.dbtest.JSONSupportClass.JSON_ARRAY);
                             parseJSON_getAllCourses(result);
                             createDropdownMenu();
+                            if (courseIdList.size() == 0){
+                                attendanceReport.setText("You haven't added any course yet. Register to courses!");
+                            } else {
+                                attendanceReport.setText("");
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.d("jsonError", "JSON Error");

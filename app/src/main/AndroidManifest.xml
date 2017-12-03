@@ -45,6 +45,8 @@
 
         <activity android:name=".checkIn"/>
         <activity android:name=".attendanceCheck"/>
+        <activity android:name=".registerToCourse"/>
+        <activity android:name=".registration"/>
     </application>
 
 </manifest>

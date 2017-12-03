@@ -47,8 +47,6 @@ public class checkIn extends AppCompatActivity implements LocationListener {
     private ImageView codeOKimage;
     private ImageView locationOKimage;
 
-
-
     // GPS Start
     private LocationManager locationManagerGPS;
     private LocationManager locationManagerNetwork;
@@ -356,7 +354,7 @@ public class checkIn extends AppCompatActivity implements LocationListener {
         final ProgressDialog progressDialog;
 
         // Storing server url into String variable.
-        String HttpUrl = "https://attendance-system-server-js5898.c9users.io/AndroidScripts/addToLesson.php";
+        String HttpUrl = "https://attendance-system-server-js5898.c9users.io/AndroidScripts/checkIn.php";
 
         // Creating Volley newRequestQueue
         requestQueue = Volley.newRequestQueue(checkIn.this);
@@ -376,7 +374,21 @@ public class checkIn extends AppCompatActivity implements LocationListener {
                         progressDialog.dismiss();
 
                         // Showing response message coming from server
-                        Toast.makeText(checkIn.this, ServerResponse, Toast.LENGTH_LONG).show();
+                        if(ServerResponse.equals("0")){
+                            Toast.makeText(checkIn.this, "You have been checked-in successfully!", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(context, MainActivity.class);
+                            context.startActivity(intent);
+                        } else if (ServerResponse.equals("1")){
+                            Toast.makeText(checkIn.this, "User doesn't exist!", Toast.LENGTH_LONG).show();
+                        } else if (ServerResponse.equals("2")){
+                            Toast.makeText(checkIn.this, "Your password is incorrect!", Toast.LENGTH_LONG).show();
+                        } else if (ServerResponse.equals("3")){
+                            Toast.makeText(checkIn.this, "Your location does not match the lecture location", Toast.LENGTH_LONG).show();
+                        } else if (ServerResponse.equals("4")){
+                            Toast.makeText(checkIn.this, "You are already checked-in to this lesson!", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(checkIn.this, "Server error!", Toast.LENGTH_LONG).show();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -406,7 +418,6 @@ public class checkIn extends AppCompatActivity implements LocationListener {
 
                 return params;
             }
-
         };
 
         // Adding the StringRequest object into requestQueue.

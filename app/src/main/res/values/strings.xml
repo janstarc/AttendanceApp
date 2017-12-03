@@ -19,7 +19,17 @@
     <string name="authentication">Authentication:</string>
     <string name="lesson_code">Lesson code:</string>
     <string name="location2">Location:</string>
-    <string name="attendnce_check">Attendnce check</string>
+    <string name="attendnce_check">Attendance check</string>
     <string name="get_courses_from_server">TEST: Get courses from server</string>
     <string name="load_lessons">Load lessons</string>
+    <string name="check_your_lesson_attendance">Check your lesson attendance</string>
+    <string name="register_to_course">Register to course</string>
+    <string name="enter_course_id">Enter course ID</string>
+    <string name="create_new_account">Create new account</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="e_mail">E-mail</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="register">Registration</string>
 </resources>
