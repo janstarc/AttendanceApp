@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +44,11 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
     private JSONArray result;
     private Spinner coursesSpinner;
     private Button loadLessons;
+
+
+    private ListView myList;
+    private ListAdapter adapter;
+    ArrayList<ListItem> items = new ArrayList<>();
 
     private ArrayList<String> courseIdList = new ArrayList<>();
     private ArrayList<String> courseNameList = new ArrayList<>();
@@ -64,11 +71,20 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
 
         getDataFromServer = (Button) findViewById(R.id.button2);
         scrollViewText = (TextView) findViewById(R.id.scrollViewText);
+        myList = (ListView) findViewById(R.id.listView);
 
         getDataFromServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getAllCourses();
+                //getAllCourses();
+                String selectedCourseName = coursesSpinner.getSelectedItem().toString();
+                int selectedCourseIndex = courseNameList.indexOf(selectedCourseName);
+                Log.d("index", "Index of course: " + selectedCourseIndex);
+                String selectedCourseId = courseIdList.get(selectedCourseIndex);
+                Log.d("index", "Selected Course ID: " + selectedCourseId);
+                getAllLessons(selectedCourseId);
+
+                getAttendedLessons(selectedCourseId, prefs.getString("user_id", null));
 
             }
         });
@@ -78,14 +94,12 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
         loadLessons.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String selectedCourseName = coursesSpinner.getSelectedItem().toString();
-                int selectedCourseIndex = courseNameList.indexOf(selectedCourseName);
-                Log.d("index", "Index of course: " + selectedCourseIndex);
-                String selectedCourseId = courseIdList.get(selectedCourseIndex);
-                Log.d("index", "Selected Course ID: " + selectedCourseId);
-                getAllLessons(selectedCourseId);
 
-                getAttendedLessons(selectedCourseId, prefs.getString("user_id", null));
+                try {
+                    updateListView();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -117,7 +131,58 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
         Log.d("queryResult", "-----------END-----------");
     }
 
+    /**
+     * 1.) Reads from DB --> Updates ArrayLists
+     * 2.) Adds items from all ArrayLists to ArrayList<ListItem> items --> The one that is passed to the adapter
+     * 3.) Updates values - Drinks sum and units sum
+     * 4.) Updates ListView
+     */
+    public void updateListView() throws ParseException {
 
+        items = new ArrayList<>();
+        Log.d("lID", "LessonId size: " + allLessonsId.size());
+
+        // Copies data from other ArrayLists to the items ArrayList --> Passed to adapter
+        if(allLessonsId.size() > 0){
+            for(int i = 0; i < allLessonsId.size(); i++){
+                addListItem(i);
+            }
+
+        } else {
+            items.add(new ListItem("No drinks on the list", 0, ""));
+        }
+
+
+
+        // Pass values to adapter
+        adapter = new ListAdapter(this, items);
+        myList.setAdapter(adapter);
+    }
+
+    public void addListItem(int i) throws ParseException {
+
+
+        String pictureName = null;
+        if(attendLessonsId.contains(allLessonsId.get(i))){
+            pictureName = "ok_img";
+        } else {
+            pictureName = "error_img";
+        }
+
+        int resourceId = this.getResources().getIdentifier(pictureName, "drawable", this.getPackageName());
+        //Log.d("resources", "Resource name: " + pictureName + " | ResourceId: " + resourceId);
+
+
+        // New ListItem creation and putting it to items list
+        ListItem item = new ListItem(i + ". " + allLessonsTitle.get(i), resourceId, "Desc: " + allLessonsDescription.get(i));
+        items.add(item);
+    }
+
+
+
+    /**
+     *  QUERY part START
+     */
     private void getAttendedLessons(final String courseId, final String userId){
 
         attendLessonsId = new ArrayList<>();
@@ -459,5 +524,9 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
         printResults("CourseID", courseIdList);
         printResults("CourseName", courseNameList);
     }
+
+    /**
+     *  QUERY part END
+     */
 
 }
