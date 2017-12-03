@@ -8,15 +8,17 @@ public class ListItem {
     private String title;
     private int imageId;
     private String description;
+    private boolean attended;
 
     public ListItem(){              // Constructor for the object without parameters
 
     }
 
-    public ListItem(String title, int imageId, String description){
+    public ListItem(String title, int imageId, String description, boolean attended){
         this.title = title;
         this.imageId = imageId;
         this.description = description;
+        this.attended = attended;
     }
 
     public String getTitle(){           // Getter for the title string
@@ -43,4 +45,11 @@ public class ListItem {
         this.description = newDescription;
     }
 
+    public void setAttended(boolean attended){
+        this.attended = attended;
+    }
+
+    public boolean getAttended(){
+        return this.attended;
+    }
 }

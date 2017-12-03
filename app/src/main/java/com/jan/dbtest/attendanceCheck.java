@@ -149,10 +149,8 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
             }
 
         } else {
-            items.add(new ListItem("No drinks on the list", 0, ""));
+            items.add(new ListItem("No drinks on the list", 0, "", false));
         }
-
-
 
         // Pass values to adapter
         adapter = new ListAdapter(this, items);
@@ -163,18 +161,19 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
 
 
         String pictureName = null;
+        boolean attended = false;
+
         if(attendLessonsId.contains(allLessonsId.get(i))){
             pictureName = "ok_img";
+            attended = true;
         } else {
             pictureName = "error_img";
         }
 
         int resourceId = this.getResources().getIdentifier(pictureName, "drawable", this.getPackageName());
-        //Log.d("resources", "Resource name: " + pictureName + " | ResourceId: " + resourceId);
-
 
         // New ListItem creation and putting it to items list
-        ListItem item = new ListItem(i + ". " + allLessonsTitle.get(i), resourceId, "Desc: " + allLessonsDescription.get(i));
+        ListItem item = new ListItem(i + ". " + allLessonsTitle.get(i), resourceId, "Desc: " + allLessonsDescription.get(i), attended);
         items.add(item);
     }
 
