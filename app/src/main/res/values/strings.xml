@@ -35,4 +35,6 @@
     <string name="don_t_have_an_account_register">Don\'t have an account? Register!</string>
     <string name="already_have_an_account_login">Already have an account? Login!</string>
     <string name="scan">Scan</string>
+    <string name="check_attendance">Check attendance</string>
+    <string name="welcome">Welcome!</string>
 </resources>

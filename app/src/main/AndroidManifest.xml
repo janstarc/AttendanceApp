@@ -20,7 +20,8 @@
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode"/>
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,17 +37,22 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
-        <activity android:name=".QRScanner"/>
+        <activity android:name=".QRScanner"
+            android:screenOrientation="portrait"/>
         <activity android:name=".LoginActivity"
-            android:label="Login"/>
+            android:screenOrientation="portrait"/>
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode"/>
 
-        <activity android:name=".checkIn"/>
-        <activity android:name=".attendanceCheck"/>
-        <activity android:name=".registerToCourse"/>
-        <activity android:name=".registration"/>
+        <activity android:name=".checkIn"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".attendanceCheck"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".registerToCourse"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".registration"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

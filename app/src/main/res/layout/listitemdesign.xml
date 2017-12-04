@@ -5,6 +5,8 @@
     android:longClickable="true">
 
     <ImageView
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_width="179px"
         android:layout_height="179px"
         android:id="@+id/image"

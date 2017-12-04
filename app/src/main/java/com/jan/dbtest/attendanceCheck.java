@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -41,11 +42,12 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
     private SharedPreferences.Editor editor;
     private SharedPreferences prefs;
     private static final String MY_PREFS_FILE = "MyPrefsFile";
-    private TextView scrollViewText;
+    //private TextView scrollViewText;
     private JSONArray result;
     private Spinner coursesSpinner;
     private Button loadLessons;
     private TextView attendanceReport;
+    private View rectangle;
 
 
     private ListView myList;
@@ -72,9 +74,13 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
         prefs = getSharedPreferences(MY_PREFS_FILE, MODE_PRIVATE);
         editor = getSharedPreferences(MY_PREFS_FILE, MODE_PRIVATE).edit();
 
-        scrollViewText = (TextView) findViewById(R.id.scrollViewText);
+        //scrollViewText = (TextView) findViewById(R.id.scrollViewText);
         myList = (ListView) findViewById(R.id.listView);
+        myList.setVisibility(View.INVISIBLE);
         attendanceReport = (TextView) findViewById(R.id.attendanceReport);
+        attendanceReport.setVisibility(View.INVISIBLE);
+        rectangle = (View) findViewById(R.id.myRectangleView);
+        rectangle.setVisibility(View.INVISIBLE);
 
         coursesSpinner = (Spinner) findViewById(R.id.coursesSpinner);
         loadLessons = (Button) findViewById(R.id.loadLessonsButton);
@@ -82,6 +88,11 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
             @Override
             public void onClick(View v) {
                 if(courseIdList.size() > 0) {
+
+                    myList.setVisibility(View.VISIBLE);
+                    attendanceReport.setVisibility(View.VISIBLE);
+                    rectangle.setVisibility(View.VISIBLE);
+
                     String selectedCourseName = coursesSpinner.getSelectedItem().toString();
                     Log.d("index1", "Selected Course Name: " + selectedCourseName);
                     int selectedCourseIndex = courseNameList.indexOf(selectedCourseName);
@@ -157,10 +168,10 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
         boolean attended = false;
 
         if(attendLessonsId.contains(allLessonsId.get(i))){
-            pictureName = "ok_img";
+            pictureName = "ok_icon";
             attended = true;
         } else {
-            pictureName = "error_img";
+            pictureName = "cross_icon";
         }
 
         int resourceId = this.getResources().getIdentifier(pictureName, "drawable", this.getPackageName());
@@ -232,7 +243,25 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
                             double percent = (attendedLessons/allLessons)*100;
                             int percentInt = (int) Math.floor(percent);
 
-                            attendanceReport.setText("You attended " + (int) attendedLessons + " out of " + (int) allLessons + " lessons (" + percentInt + "%) | Req: " + requiredAttendance + "%");
+                            String textOut = "";
+
+                            if(requiredAttendance == 0 || percentInt >= requiredAttendance){
+                                textOut = "<font color=#757575><big>You attended </font>" +
+                                        "<font color=#4684C4><b><big>" + (int) attendedLessons + "</b></big></font><font color=#757575> out of </font><font color=#4684C4><b><big> "
+                                        + (int) allLessons + " </b></big></font>lessons<font color=#4684C4><b><big> (" + percentInt + "%)</b></big></font><br>" +
+                                        "<font color=#757575>(Required attendance: " + requiredAttendance + "%)</font>";
+                            } else {
+                                textOut = "<font color=#757575><big>You attended </font>" +
+                                        "<font color=#C64747><b><big>" + (int) attendedLessons + "</b></big></font><font color=#757575> out of </font><font color=#C64747><b><big> "
+                                        + (int) allLessons + " </b></big></font>lessons<font color=#C64747><b><big> (" + percentInt + "%)</b></big></font><br>" +
+                                        "<font color=#757575>(Required attendance: " + requiredAttendance + "%)</font>";
+                            }
+
+
+
+                            //attendanceReport.setText("You attended " + (int) attendedLessons + " out of " + (int) allLessons + " lessons (" + percentInt + "%) | Req: " + requiredAttendance + "%");
+                            attendanceReport.setText(Html.fromHtml(textOut));
+
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -273,7 +302,7 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
 
     private void parseJSON_getAttendedLessons(JSONArray j){
         Log.d("debug", "Here, being called. jLength: " + j.length());
-        scrollViewText.setText("");
+        //scrollViewText.setText("");
         for(int i=0;i<j.length();i++){
             try {
                 JSONObject json = j.getJSONObject(i);
@@ -392,7 +421,7 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
 
     private void parseJSON_getAllLessons(JSONArray j){
         Log.d("debug", "Here, being called. jLength: " + j.length());
-        scrollViewText.setText("");
+        //scrollViewText.setText("");
         for(int i=0;i<j.length();i++){
             try {
                 JSONObject json = j.getJSONObject(i);
@@ -514,7 +543,7 @@ public class attendanceCheck extends AppCompatActivity implements Serializable {
 
     private void parseJSON_getAllCourses(JSONArray j){
         Log.d("debug", "Here, being called. jLength: " + j.length());
-        scrollViewText.setText("");
+        //scrollViewText.setText("");
         for(int i=0;i<j.length();i++){
             try {
                 JSONObject json = j.getJSONObject(i);

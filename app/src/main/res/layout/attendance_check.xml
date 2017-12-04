@@ -1,81 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#1E88E5">
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_marginTop="130dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:id="@+id/scrollView3">
-
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:stretchColumns="1">
-
-            <!-- everything you already have -->
-            <TextView
-                android:id="@+id/scrollViewText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-        </TableLayout>
-    </ScrollView>
-
-    <TextView
-        android:id="@+id/instructions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="236dp"
+        android:layout_height="61dp"
         android:layout_alignParentTop="true"
-        android:text="@string/check_your_lesson_attendance"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"/>
-
-    <Spinner
-        android:id="@+id/coursesSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/instructions" />
-
-    <Button
-        android:id="@+id/loadLessonsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/coursesSpinner"
-        android:text="@string/load_lessons"
-        android:textAllCaps="false"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="9dp"
+        app:srcCompat="@drawable/icon_transparent" />
 
 
     <ListView
         android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/scrollView3"
+        android:layout_width="370dp"
+        android:layout_height="395dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="7dp"
         android:background="#FFFFFF" />
+
+    <Spinner
+        android:id="@+id/coursesSpinner"
+        style="@style/spinner_style"
+        android:layout_width="370dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/loadLessonsButton"
+        android:layout_alignStart="@+id/loadLessonsButton"
+        android:layout_below="@+id/imageView"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:id="@+id/loadLessonsButton"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/myRectangleView"
+        android:layout_alignStart="@+id/myRectangleView"
+        android:layout_below="@+id/coursesSpinner"
+        android:layout_marginTop="10dp"
+        android:background="#0D47A1"
+        android:text="@string/check_attendance"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp" />
+
+    <View
+        android:id="@+id/myRectangleView"
+        android:layout_width="370dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/loadLessonsButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp"
+        android:background="@drawable/rectangle" />
 
     <TextView
         android:id="@+id/attendanceReport"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/loadLessonsButton"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:text="ATTENDANCE REPORT"/>
+        android:layout_width="350dp"
+        android:layout_height="54dp"
+        android:layout_alignTop="@+id/myRectangleView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="3dp"
+        android:text="TextView"
+        android:textAlignment="center" />
 
 
 </RelativeLayout>

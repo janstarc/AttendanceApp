@@ -8,6 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="spinner_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:popupBackground">#FFFFFF</item>
+        <item name="android:textSize">18sp</item>
+
+    </style>
+
     <style name = "NoActionBar" parent = "@android:style/Theme.Holo.Light">
         <item name = "android:windowActionBar">false</item>
         <item name = "android:windowNoTitle">true</item>

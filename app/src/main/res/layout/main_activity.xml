@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#1E88E5">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="351dp"
+        android:layout_height="82.8dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        app:srcCompat="@drawable/icon_transparent" />
+
+    <View
+        android:id="@+id/myRectangleView"
+        android:layout_width="370dp"
+        android:layout_height="340dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="68dp"
+        android:background="@drawable/rectangle" />
+
+
+    <Button
+        android:id="@+id/addToLessonActivity"
+        android:layout_width="345dp"
+        android:layout_height="60dp"
+        android:layout_alignTop="@+id/myRectangleView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="#0D47A1"
+        android:text="Lesson Check-In"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/attendanceCheckButton"
+        android:layout_width="345dp"
+        android:layout_height="60dp"
+        android:layout_alignEnd="@+id/imageView"
+        android:layout_alignRight="@+id/imageView"
+        android:layout_below="@+id/addToLessonActivity"
+        android:layout_marginTop="20dp"
+        android:background="#0D47A1"
+        android:text="@string/attendnce_check"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/registerToCourse"
+        android:layout_width="345dp"
+        android:layout_height="60dp"
+        android:layout_alignLeft="@+id/attendanceCheckButton"
+        android:layout_alignStart="@+id/attendanceCheckButton"
+        android:layout_below="@+id/attendanceCheckButton"
+        android:layout_marginTop="20dp"
+        android:background="#0D47A1"
+        android:text="@string/register_to_course"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/loginActivityButton"
+        android:layout_width="345dp"
+        android:layout_height="60dp"
+        android:layout_alignLeft="@+id/registerToCourse"
+        android:layout_alignStart="@+id/registerToCourse"
+        android:layout_below="@+id/registerToCourse"
+        android:layout_marginTop="20dp"
+        android:background="#448aff"
+        android:text="Logout"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/myRectangleView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:text="@string/welcome"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp" />
+
+
+</RelativeLayout>
