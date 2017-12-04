@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1E88E5" >
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="351dp"
+        android:layout_height="82.8dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="84dp"
+        app:srcCompat="@drawable/icon_transparent" />
+
+
+
+    <View
+        android:id="@+id/myRectangleView"
+        android:layout_width="370dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="250dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/rectangle"/>
+
+    <View
+        android:id="@+id/myRectangleView2"
+        android:layout_width="370dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="340dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/rectangle"/>
+
+    <View
+        android:id="@+id/myRectangleView3"
+        android:layout_width="370dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="430dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/rectangle"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/myRectangleView"
+        android:layout_alignLeft="@+id/imageView"
+        android:layout_alignStart="@+id/imageView"
+        android:layout_marginBottom="19dp"
+        android:text="@string/authentication"
+        android:textColor="#757575"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:layout_alignTop="@+id/myRectangleView2"
+        android:layout_marginTop="19dp"
+        android:text="@string/location"
+        android:textColor="#757575"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignStart="@+id/textView2"
+        android:layout_alignTop="@+id/myRectangleView3"
+        android:layout_marginTop="19dp"
+        android:text="@string/lesson_code"
+        android:textColor="#757575"
+        android:textSize="30dp" />
+
+    <Button
+        android:id="@+id/addToLessonButton"
+        android:layout_width="340dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/myRectangleView3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="27dp"
+        android:background="#0D47A1"
+        android:text="@string/add_to_lesson"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/scanQRButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="62dp"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/myRectangleView3"
+        android:layout_alignRight="@+id/myRectangleView3"
+        android:layout_alignTop="@+id/textView3"
+        android:text="@string/scan"
+        android:textColor="#1A237E"
+        android:textStyle="bold"/>
+
+    <ProgressBar
+        android:id="@+id/progress1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/imageView"
+        android:layout_alignRight="@+id/imageView"
+        android:layout_alignTop="@+id/textView"
+        android:indeterminate="true"
+        />
+
+    <ProgressBar
+        android:id="@+id/progress2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/progress1"
+        android:layout_alignStart="@+id/progress1"
+        android:layout_alignTop="@+id/textView2"
+        android:indeterminate="true"
+        />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="50dp"
+        android:layout_height="38dp"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_alignLeft="@+id/progress1"
+        android:layout_alignStart="@+id/progress1"
+        app:srcCompat="@drawable/ok_icon" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="50dp"
+        android:layout_height="38dp"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignLeft="@+id/progress2"
+        android:layout_alignStart="@+id/progress2"
+        app:srcCompat="@drawable/ok_icon" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="50dp"
+        android:layout_height="38dp"
+        android:layout_alignBottom="@+id/textView3"
+        android:layout_alignEnd="@+id/progress2"
+        android:layout_alignRight="@+id/progress2"
+        app:srcCompat="@drawable/ok_icon" />
+
+
+</RelativeLayout>

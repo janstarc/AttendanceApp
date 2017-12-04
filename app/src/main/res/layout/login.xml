@@ -1,50 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1E88E5">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/enter_your_username_and_password"
-        android:textSize="20sp" />
 
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="48dp"
-        android:ems="10"
-        android:hint="@string/enter_your_name" />
+    <View
+        android:id="@+id/myRectangleView"
+        android:layout_width="370dp"
+        android:layout_height="320dp"
+        android:layout_marginTop="250dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/rectangle"/>
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="fill_parent"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/unInput"
+        android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/username"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="@string/enter_your_email"
-        android:inputType="textPassword" />
+        android:layout_marginTop="270dp"
+        android:layout_centerHorizontal="true"
+        android:theme="@style/TextLabel">
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="48dp"
+            android:ems="10"
+            android:hint="@string/enter_your_name" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/pwInput"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="350dp"
+        android:layout_centerHorizontal="true"
+        android:theme="@style/TextLabel">
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/unInput"
+            android:layout_marginTop="24dp"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/loginButton"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/pwInput"
+        android:layout_alignStart="@+id/pwInput"
+        android:layout_below="@+id/pwInput"
+        android:layout_marginTop="30dp"
+        android:text="@string/login"
+        android:textAllCaps="false"
+        android:background="#0D47A1"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="351dp"
+        android:layout_height="82.8dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="84dp"
+        app:srcCompat="@drawable/icon_transparent" />
+
+    <Button
+        android:id="@+id/registerButton"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView"
-        android:layout_below="@+id/password"
-        android:layout_marginTop="17dp"
-        android:text="@string/login" />
+        android:layout_alignBottom="@+id/myRectangleView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:text="@string/don_t_have_an_account_register"
+        android:textAllCaps="false"
+        android:textColor="#757575" />
+
+
 </RelativeLayout>

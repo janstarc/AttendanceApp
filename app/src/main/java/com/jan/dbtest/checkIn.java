@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -19,7 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -46,6 +47,8 @@ public class checkIn extends AppCompatActivity implements LocationListener {
     private ImageView loginOKimage;
     private ImageView codeOKimage;
     private ImageView locationOKimage;
+    private ProgressBar progress1;
+    private ProgressBar progress2;
 
     // GPS Start
     private LocationManager locationManagerGPS;
@@ -75,10 +78,10 @@ public class checkIn extends AppCompatActivity implements LocationListener {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_to_lesson);
+        setContentView(R.layout.check_in);
 
         defineVariables();
-        drawLoading();
+        setOkInvisible();
         prefs = getSharedPreferences(MY_PREFS_FILE, MODE_PRIVATE);
         editor = getSharedPreferences(MY_PREFS_FILE, MODE_PRIVATE).edit();
         loginOK = checkLogin();
@@ -134,9 +137,12 @@ public class checkIn extends AppCompatActivity implements LocationListener {
         scanQRButton.setOnClickListener(scanQRListener);
         addToLessonButton = (Button) findViewById(R.id.addToLessonButton);
         addToLessonButton.setOnClickListener(addToLessonListener);
-        loginOKimage = (ImageView) findViewById(R.id.loginOK);
-        codeOKimage = (ImageView) findViewById(R.id.codeOK);
-        locationOKimage = (ImageView) findViewById(R.id.locationOK);
+        loginOKimage = (ImageView) findViewById(R.id.imageView1);
+        locationOKimage = (ImageView) findViewById(R.id.imageView2);
+        codeOKimage = (ImageView) findViewById(R.id.imageView3);
+        progress1 = (ProgressBar) findViewById(R.id.progress1);
+        progress2 = (ProgressBar) findViewById(R.id.progress2);
+
 
         // GPS Objects START
         locationManagerGPS = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -144,10 +150,10 @@ public class checkIn extends AppCompatActivity implements LocationListener {
         // GPS Objects END
     }
 
-    public void drawLoading(){
-        locationOKimage.setImageResource(R.drawable.loading_img);
-        codeOKimage.setImageResource(R.drawable.loading_img);
-        locationOKimage.setImageResource(R.drawable.loading_img);
+    public void setOkInvisible(){
+        locationOKimage.setVisibility(View.INVISIBLE);
+        codeOKimage.setVisibility(View.INVISIBLE);
+        locationOKimage.setVisibility(View.INVISIBLE);
     }
 
     public boolean checkLogin(){
@@ -158,7 +164,8 @@ public class checkIn extends AppCompatActivity implements LocationListener {
         } else {
 
             Log.d("userData", "Username: " + prefs.getString("username", null) + " | Password: " + prefs.getString("password", null) + " | UserId: " + prefs.getString("user_id", null));
-            loginOKimage.setImageResource(R.drawable.ok_img);
+            progress1.setVisibility(View.INVISIBLE);
+            loginOKimage.setVisibility(View.VISIBLE);
             loginOK = true;
             return true;
         }
@@ -168,11 +175,14 @@ public class checkIn extends AppCompatActivity implements LocationListener {
 
     public boolean checkQR(){
         if(uniqueCode != null && uniqueCode.length() == 6){
-            codeOKimage.setImageResource(R.drawable.ok_img);
+            scanQRButton.setVisibility(View.INVISIBLE);
+            codeOKimage.setVisibility(View.VISIBLE);
             codeOK = true;
             return true;
         } else {
-            codeOKimage.setImageResource(R.drawable.error_img);
+            //codeOKimage.setImageResource(R.drawable.error_img);
+            Toast.makeText(context, "Unvaild code. Please scan the code again", Toast.LENGTH_SHORT).show();
+            scanQRButton.setText("SCAN AGAIN");
             codeOK = false;
         }
         return false;
@@ -181,11 +191,14 @@ public class checkIn extends AppCompatActivity implements LocationListener {
     public boolean checkLocation(){
         if(longitude != -1 && latitude != -1 && accuracy != -1 && accuracy < 80){
 
-            locationOKimage.setImageResource(R.drawable.ok_img);
+
+            progress2.setVisibility(View.INVISIBLE);
+            locationOKimage.setVisibility(View.VISIBLE);
             locationOK = true;
             return true;
         } else  {
-            locationOKimage.setImageResource(R.drawable.loading_img);
+            //locationOKimage.setImageResource(R.drawable.loading_img);
+            // TODO
         }
 
         return false;

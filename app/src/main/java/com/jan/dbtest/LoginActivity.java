@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.util.HashMap;
@@ -37,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText usernameET;
     private EditText passwordET;
     private Button loginButton;
+    private Button registerButton;
     String username;
     String password;
     private Context context = this;
@@ -74,6 +77,15 @@ public class LoginActivity extends AppCompatActivity {
                 editor.apply();
 
                 login();
+            }
+        });
+
+        registerButton = (Button) findViewById(R.id.registerButton);
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, registration.class);
+                context.startActivity(intent);
             }
         });
     }

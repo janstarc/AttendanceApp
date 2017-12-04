@@ -34,6 +34,7 @@ public class registration extends AppCompatActivity {
     private EditText usernameET;
     private EditText passwordET;
     private Button createNewAccount;
+    private Button loginButton;
 
     // SharedPreferences
     private SharedPreferences.Editor editor;
@@ -72,6 +73,16 @@ public class registration extends AppCompatActivity {
                 }
             }
         });
+
+        loginButton = (Button) findViewById(R.id.loginButton);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, LoginActivity.class);
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     public void createAccount(final String firstname, final String lastname, final String email, final String username, final String password){
@@ -150,7 +161,6 @@ public class registration extends AppCompatActivity {
 
                 return params;
             }
-
         };
 
         // Adding the StringRequest object into requestQueue.

@@ -1,41 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#1E88E5">
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="351dp"
+        android:layout_height="82.8dp"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/register_to_course"
-        android:textSize="20sp"
-        android:id="@+id/textView7" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="114dp"
+        app:srcCompat="@drawable/icon_transparent" />
 
-    <EditText
-        android:id="@+id/registerToCourseEditText"
-        android:layout_width="fill_parent"
+    <View
+        android:id="@+id/myRectangleView"
+        android:layout_width="370dp"
+        android:layout_height="200dp"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="98dp"
+        android:background="@drawable/rectangle" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/pwInput"
+        android:hint="@string/enter_course_id"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="48dp"
-        android:ems="10"
-        android:inputType="number"
-        android:maxLength="5"
-        android:hint="@string/enter_course_id" />
+        android:layout_marginTop="330dp"
+        android:layout_centerHorizontal="true"
+        android:theme="@style/TextLabel">
+
+        <EditText
+            android:id="@+id/registerToCourseEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/myRectangleView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:ems="10"
+            android:inputType="number" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/registerToCourseButton"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView7"
-        android:layout_alignStart="@+id/textView7"
-        android:layout_below="@+id/registerToCourseEditText"
-        android:layout_marginTop="26dp"
-        android:text="@string/register_to_course" />
+        android:layout_below="@+id/pwInput"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="27dp"
+        android:text="@string/register_to_course"
+        android:textAllCaps="false"
+        android:background="#0D47A1"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"/>
+
+
 </RelativeLayout>
