@@ -1,24 +1,20 @@
 package com.jan.dbtest;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private Button gotoAttendanceCheck;
     private Button registerToCourse;
     private Button registration;
+    private String deviceId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +47,7 @@ public class MainActivity extends AppCompatActivity {
         editor = getSharedPreferences(MY_PREFS_FILE, MODE_PRIVATE).edit();
         welcomeMessage = (TextView) findViewById(R.id.welcMessage);
         checkLogin();
-        //setWelcomeMessage();
-
-        //textView1 = (TextView)findViewById(R.id.textView1);
+        checkDeviceId();
 
         loginActivityButton = (Button) findViewById(R.id.loginActivityButton);
         loginActivityButton.setOnClickListener(new View.OnClickListener() {
@@ -114,5 +109,59 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         checkLogin();
+    }
+
+    public static String random(int length) {
+        Random generator = new Random();
+        StringBuilder randomStringBuilder = new StringBuilder();
+        //int randomLength = generator.nextInt(MAX_LENGTH);
+        char tempChar;
+        for (int i = 0; i < length; i++){
+            tempChar = (char) (generator.nextInt(96) + 32);
+            randomStringBuilder.append(tempChar);
+        }
+        return randomStringBuilder.toString();
+    }
+
+    public static String random2(int length){
+
+        char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < length; i++) {
+            char c = chars[random.nextInt(chars.length)];
+            sb.append(c);
+        }
+        String output = sb.toString();
+        //System.out.println(output);
+        return output;
+    }
+
+    public void checkDeviceId(){
+
+        // Device ID isn't assigned yet
+        if(prefs.getString("deviceId", null) == null) {
+
+
+            TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            // Permission issue
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+
+                String id = prefs.getString("deviceId", null);
+                if (id == null) {
+                    deviceId = random2(15);
+                    editor.putString("deviceId", deviceId);
+                    editor.apply();
+                }
+            } else {            // No permision issue
+                deviceId = tManager.getDeviceId();
+                editor.putString("deviceId", deviceId);
+                editor.apply();
+            }
+        }
+
+        deviceId = prefs.getString("deviceId", deviceId);
+
+        Log.d("deviceIdaaaa", "Device ID: " + deviceId);
     }
 }

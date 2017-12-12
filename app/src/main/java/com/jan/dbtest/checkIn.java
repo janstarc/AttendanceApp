@@ -399,8 +399,10 @@ public class checkIn extends AppCompatActivity implements LocationListener {
                             Toast.makeText(checkIn.this, "Your location does not match the lecture location", Toast.LENGTH_LONG).show();
                         } else if (ServerResponse.equals("4")){
                             Toast.makeText(checkIn.this, "You are already checked-in to this lesson!", Toast.LENGTH_LONG).show();
+                        } else if (ServerResponse.equals("5")){
+                            Toast.makeText(checkIn.this, "Someone already signed in from the same device!", Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(checkIn.this, "Server error!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(checkIn.this, "Server error!" + ServerResponse, Toast.LENGTH_LONG).show();
                         }
                     }
                 },
@@ -428,6 +430,7 @@ public class checkIn extends AppCompatActivity implements LocationListener {
                 params.put("uniqueCode", uniqueCode);
                 params.put("latitude", Double.toString(latitude));
                 params.put("longitude", Double.toString(longitude));
+                params.put("deviceId", prefs.getString("deviceId", null));
 
                 return params;
             }

@@ -26,14 +26,12 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
 
 
 public class attendanceCheck extends AppCompatActivity implements Serializable {
