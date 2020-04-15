@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/AttendanceAppGitHub.iml" filepath="$PROJECT_DIR$/.idea/AttendanceAppGitHub.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/AttendanceAppGitHub.iml" filepath="$PROJECT_DIR$/.idea/AttendanceAppGitHub.iml" group="AttendanceAppGitHub" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="AttendanceAppGitHub/app" />
     </modules>
   </component>
 </project>
