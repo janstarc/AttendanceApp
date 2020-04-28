@@ -34,7 +34,6 @@ Home Page
 ---------
 Main menu of the app - users can check in to lesson, check presence at previous lessons and register to a new course.
 
-<br>
 <img src="ReadMeScreenshots/1_HomeScreen.jpg" alt="Home Screen"  height="550">
 
 
@@ -51,10 +50,8 @@ the student is attending the course. If all the data fits, then the attendance i
 
 Attendance Check
 ----------------
-
 Here users can choose a course from a dropdown menu and check attendance at previous lectures of the course. They can also check required (obligatory) attendance at lectures of the course.
 
-<br><br>
 <img src="ReadMeScreenshots/3_AttendanceCheck1.jpg" alt="Attendance Check"  height="550">
 <br><br>
 <img src="ReadMeScreenshots/3_AttendanceCheck2.jpg" alt="Attendance Check 2"  height="550">
