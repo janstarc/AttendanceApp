@@ -1,7 +1,7 @@
 Attendance App 
 ==============
 Attendance App is an Android app, combined with a simple server application in PHP and mySQL database to check student attendance at lectures.  
-For the php server, check the **INSERT LINK** repository.
+For the php server, see <a href="https://github.com/janstarc/Attendance">this</a> repository.
 
 Problem
 -------------
